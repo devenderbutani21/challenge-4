@@ -1,146 +1,214 @@
 import 'package:flutter/material.dart';
-import 'package:awesome_card/awesome_card.dart';
+import 'package:flip_card/flip_card.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Awesome Credit Card Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Credit Card'),
+      title: 'Payment Card',
+      theme: ThemeData.light(),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  String cardNumber = "";
-  String cardHolderName = "";
-  String expiryDate = "";
-  String cvv = "";
-  bool showBack = false;
-
-  FocusNode _focusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = new FocusNode();
-    _focusNode.addListener(() {
-      setState(() {
-        _focusNode.hasFocus ? showBack = true : showBack = false;
-      });
-    });
+class HomePage extends StatelessWidget {
+  _renderBg() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.blue,
+            Colors.blueAccent,
+          ],
+        ),
+      ),
+    );
   }
 
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
+  _renderAppBar(context) {
+    return MediaQuery.removePadding(
+      context: context,
+      removeBottom: true,
+      child: AppBar(
+        brightness: Brightness.dark,
+        elevation: 0.0,
+        backgroundColor: Color(0x00FFFFFF),
+      ),
+    );
+  }
+
+  _renderContent(context) {
+    return Card(
+      elevation: 0.0,
+      margin: EdgeInsets.only(left: 12.0, right: 12.0, top: 0.0, bottom: 0.0),
+      color: Color(0x00000000),
+      child: FlipCard(
+        direction: FlipDirection.HORIZONTAL,
+        speed: 1000,
+        onFlipDone: (status) {
+          print(status);
+        },
+        front: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade400.withOpacity(0.8),
+            borderRadius: BorderRadius.all(
+              Radius.circular(25.0),
+            ),
+          ),
+          child: Stack(
+            children: <Widget>[
+              // ignore: deprecated_member_use
+              Positioned(
+                top: 30,
+                left: 30,
+                child: Text(
+                  'INFINITESHOP',
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 10,
+                right: 15,
+                child: Image.asset(
+                  'assets/images/maestro.png',
+                  height: 60,
+                  width: 60,
+                ),
+              ),
+              Positioned(
+                bottom: 20,
+                right: 15,
+                child: Image.asset(
+                  'assets/images/chip.png',
+                  height: 50,
+                  width: 50,
+                ),
+              ),
+              Positioned(
+                top: 80,
+                left: 30,
+                child: Text(
+                  'XXXX XXXX XXXX XXXX',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 120,
+                left: 30,
+                child: Text(
+                  'Valid until   MM/YY',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 30,
+                left: 30,
+                child: Text(
+                  'CARDHOLDER NAME',
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        back: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade400.withOpacity(0.8),
+            borderRadius: BorderRadius.all(
+              Radius.circular(25.0),
+            ),
+          ),
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                top: 30,
+                child: Container(
+                  height: 50,
+                  width: 400,
+                  color: Color(0xff2c2b29),
+                ),
+              ),
+              Positioned(
+                top: 100,
+                child: Container(
+                  height: 55,
+                  width: 300,
+                  color: Colors.grey.shade300,
+                ),
+              ),
+              Positioned(
+                top: 107.5,
+                left: 300,
+                child: Container(
+                  height: 40,
+                  width: 300,
+                  color: Colors.white,
+                ),
+              ),
+              Positioned(
+                top: 115,
+                left: 330,
+                child: Text(
+                  'CVV',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 20,
+                right: 15,
+                child: Image.asset(
+                  'assets/images/chip.png',
+                  height: 50,
+                  width: 50,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+//    Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 40,
-              ),
-              CreditCard(
-                cardNumber: cardNumber,
-                cardExpiry: expiryDate,
-                cardHolderName: cardHolderName,
-                cvv: cvv,
-                bankName: "InfiniteBank",
-                showBackSide: showBack,
-                frontBackground: CardBackgrounds.black,
-                backBackground: CardBackgrounds.white,
-                showShadow: true,
-              ),
-              SizedBox(
-                height: 40,
-              ),
-
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    child: TextFormField(
-                      decoration: InputDecoration(hintText: "Card Number"),
-                      maxLength: 19,
-                      onChanged: (value) {
-                        setState(() {
-                          cardNumber = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    child: TextFormField(
-                      decoration: InputDecoration(hintText: "Card Expiry"),
-                      maxLength: 5,
-                      onChanged: (value) {
-                        setState(() {
-                          expiryDate = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    child: TextFormField(
-                      decoration: InputDecoration(hintText: "Card Holder Name"),
-                      onChanged: (value) {
-                        setState(() {
-                          cardHolderName = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                    child: TextFormField(
-                      decoration: InputDecoration(hintText: "CVV"),
-                      maxLength: 3,
-                      onChanged: (value) {
-                        setState(() {
-                          cvv = value;
-                        });
-                      },
-                      focusNode: _focusNode,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            _renderBg(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                _renderAppBar(context),
+                Expanded(
+                  flex: 4,
+                  child: _renderContent(context),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: Container(),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
