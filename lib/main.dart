@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 
+import 'custom_container.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -15,7 +17,24 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final cardNoController = TextEditingController();
+  final expDateController = TextEditingController();
+  final cvvController = TextEditingController();
+  final cardHolderNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    cardNoController.dispose();
+    super.dispose();
+  }
+
   _renderBg() {
     return Container(
       decoration: BoxDecoration(
@@ -46,14 +65,11 @@ class HomePage extends StatelessWidget {
   _renderContent(context) {
     return Card(
       elevation: 0.0,
-      margin: EdgeInsets.only(left: 12.0, right: 12.0, top: 0.0, bottom: 0.0),
+      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0, bottom: 0.0),
       color: Color(0x00000000),
       child: FlipCard(
         direction: FlipDirection.HORIZONTAL,
         speed: 1000,
-        onFlipDone: (status) {
-          print(status);
-        },
         front: Container(
           decoration: BoxDecoration(
             color: Colors.grey.shade400.withOpacity(0.8),
@@ -96,7 +112,8 @@ class HomePage extends StatelessWidget {
                 top: 80,
                 left: 30,
                 child: Text(
-                  'XXXX XXXX XXXX XXXX',
+//                  'XXXX XXXX XXXX XXXX',
+                  cardNoController.text,
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -187,28 +204,106 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//    Size deviceSize = MediaQuery.of(context).size;
+    Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            _renderBg(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+        body: SingleChildScrollView(
+          child: Container(
+            color: Colors.blue,
+            height: deviceSize.height,
+            width: deviceSize.width,
+            child: Column(
               children: <Widget>[
-                _renderAppBar(context),
-                Expanded(
-                  flex: 4,
+                Container(
+                  height: deviceSize.height / 3,
+                  width: deviceSize.width,
                   child: _renderContent(context),
                 ),
-                Expanded(
-                  flex: 6,
-                  child: Container(),
+                Container(
+                  height: deviceSize.height * 2 / 3,
+                  width: deviceSize.width,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        CustomContainer(
+                          labelText: 'Card Number',
+                          childWidget: Container(
+                            height: 60,
+                            width: 350,
+                            margin: EdgeInsets.only(
+                              top: 30,
+                              left: 10,
+                              bottom: 5,
+                            ),
+                            child: TextField(
+                              controller: cardNoController,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        CustomContainer(
+                          labelText: 'Expiry Date',
+                          childWidget: Container(
+                            height: 60,
+                            width: 350,
+                            margin: EdgeInsets.only(
+                              top: 30,
+                              left: 10,
+                              bottom: 5,
+                            ),
+                            child: TextField(
+                              controller: cardNoController,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        CustomContainer(
+                          labelText: 'CVV',
+                          childWidget: Container(
+                            height: 60,
+                            width: 350,
+                            margin: EdgeInsets.only(
+                              top: 30,
+                              left: 10,
+                              bottom: 5,
+                            ),
+                            child: TextField(
+                              controller: cardNoController,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        CustomContainer(
+                          labelText: 'CardHolder Name',
+                          childWidget: Container(
+                            height: 60,
+                            width: 350,
+                            margin: EdgeInsets.only(
+                              top: 30,
+                              left: 10,
+                              bottom: 5,
+                            ),
+                            child: TextField(
+                              controller: cardNoController,
+                              style: TextStyle(
+                                fontSize: 40.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );
