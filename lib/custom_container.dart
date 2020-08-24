@@ -11,7 +11,7 @@ class CustomContainer extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Positioned(
-          bottom: 0,
+          bottom: 17.5,
           child: Container(
             width: 360,
             height: 60,
@@ -23,7 +23,7 @@ class CustomContainer extends StatelessWidget {
         ),
         Positioned(
           left: 10,
-          bottom: 50,
+          bottom: 65,
           child: Container(
             color: Colors.blueAccent,
             child: Text(

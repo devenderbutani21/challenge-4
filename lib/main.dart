@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:flutter_rounded_date_picker/rounded_picker.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'custom_container.dart';
 
@@ -10,8 +13,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'), // English
+      ],
       title: 'Payment Card',
-      theme: ThemeData.light(),
+      theme: ThemeData.dark(),
       home: HomePage(),
     );
   }
@@ -59,6 +69,20 @@ class _HomePageState extends State<HomePage> {
         elevation: 0.0,
         backgroundColor: Color(0x00FFFFFF),
       ),
+    );
+  }
+
+  datePicker() {
+    return CupertinoRoundedDatePicker.show(
+      context,
+      fontFamily: "Mali",
+      textColor: Colors.white,
+      background: Colors.red[300],
+      borderRadius: 16,
+      initialDatePickerMode: CupertinoDatePickerMode.date,
+      onDateTimeChanged: (newDateTime) {
+        //
+      },
     );
   }
 
@@ -113,9 +137,12 @@ class _HomePageState extends State<HomePage> {
                 left: 30,
                 child: Text(
 //                  'XXXX XXXX XXXX XXXX',
-                  cardNoController.text,
+                  cardNoController.text.isEmpty
+                      ? 'XXXX XXXX XXXX XXXX'
+                      : cardNoController.text,
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -126,16 +153,18 @@ class _HomePageState extends State<HomePage> {
                   'Valid until   MM/YY',
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.black,
                   ),
                 ),
               ),
               Positioned(
-                bottom: 30,
+                bottom: 20,
                 left: 30,
                 child: Text(
                   'CARDHOLDER NAME',
                   style: TextStyle(
                     fontSize: 22,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -207,6 +236,7 @@ class _HomePageState extends State<HomePage> {
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Container(
             color: Colors.blue,
@@ -225,6 +255,9 @@ class _HomePageState extends State<HomePage> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
+                        SizedBox(
+                          height: 10,
+                        ),
                         CustomContainer(
                           labelText: 'Card Number',
                           childWidget: Container(
@@ -233,12 +266,18 @@ class _HomePageState extends State<HomePage> {
                             margin: EdgeInsets.only(
                               top: 30,
                               left: 10,
-                              bottom: 5,
+                              bottom: 0,
                             ),
                             child: TextField(
                               controller: cardNoController,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
+                              maxLength: 16,
                               style: TextStyle(
-                                fontSize: 40.0,
+                                fontSize: 36.0,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -254,9 +293,14 @@ class _HomePageState extends State<HomePage> {
                               bottom: 5,
                             ),
                             child: TextField(
-                              controller: cardNoController,
+                              controller: expDateController,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
                               style: TextStyle(
-                                fontSize: 40.0,
+                                fontSize: 36.0,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -272,9 +316,15 @@ class _HomePageState extends State<HomePage> {
                               bottom: 5,
                             ),
                             child: TextField(
-                              controller: cardNoController,
+                              controller: cvvController,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
+                              maxLength: 4,
                               style: TextStyle(
-                                fontSize: 40.0,
+                                fontSize: 36.0,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -290,13 +340,27 @@ class _HomePageState extends State<HomePage> {
                               bottom: 5,
                             ),
                             child: TextField(
-                              controller: cardNoController,
+                              controller: cardHolderNameController,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
                               style: TextStyle(
-                                fontSize: 40.0,
+                                fontSize: 36.0,
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         ),
+//                        Container(
+//                          height: 50,
+//                          width: 50,
+//                          color: Colors.white,
+//                          child: AnimatedIcon(
+//                            icon: AnimatedIcons.arrow_menu,
+//                            progress: Animation(1),
+//                          ),
+//                        ),
                       ],
                     ),
                   ),
