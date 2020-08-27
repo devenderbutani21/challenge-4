@@ -173,6 +173,7 @@ class _HomePageState extends State<HomePage> {
                   cvv,
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -253,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                               },
                               maxLength: 19,
                               style: TextStyle(
-                                fontSize: 36.0,
+                                fontSize: 32.0,
                                 color: Colors.white,
                               ),
                             ),
@@ -285,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                               },
                               maxLength: 5,
                               style: TextStyle(
-                                fontSize: 36.0,
+                                fontSize: 32.0,
                                 color: Colors.white,
                               ),
                             ),
@@ -316,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                               },
                               maxLength: 4,
                               style: TextStyle(
-                                fontSize: 36.0,
+                                fontSize: 32.0,
                                 color: Colors.white,
                               ),
                             ),
@@ -348,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                               },
                               maxLength: 30,
                               style: TextStyle(
-                                fontSize: 36.0,
+                                fontSize: 32.0,
                                 color: Colors.white,
                               ),
                             ),
