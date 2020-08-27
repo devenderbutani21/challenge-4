@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:challenge4/success.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
-import 'package:flutter_rounded_date_picker/rounded_picker.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'custom_container.dart';
 
@@ -13,13 +11,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', 'US'), // English
-      ],
       title: 'Payment Card',
       theme: ThemeData.dark(),
       home: HomePage(),
@@ -33,57 +24,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final cardNoController = TextEditingController();
-  final expDateController = TextEditingController();
-  final cvvController = TextEditingController();
-  final cardHolderNameController = TextEditingController();
+  String cardNo = '';
+  String expDate = '';
+  String cvv = '';
+  String cardHolderName = '';
+
+  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    cardNoController.dispose();
     super.dispose();
-  }
-
-  _renderBg() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.blue,
-            Colors.blueAccent,
-          ],
-        ),
-      ),
-    );
-  }
-
-  _renderAppBar(context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeBottom: true,
-      child: AppBar(
-        brightness: Brightness.dark,
-        elevation: 0.0,
-        backgroundColor: Color(0x00FFFFFF),
-      ),
-    );
-  }
-
-  datePicker() {
-    return CupertinoRoundedDatePicker.show(
-      context,
-      fontFamily: "Mali",
-      textColor: Colors.white,
-      background: Colors.red[300],
-      borderRadius: 16,
-      initialDatePickerMode: CupertinoDatePickerMode.date,
-      onDateTimeChanged: (newDateTime) {
-        //
-      },
-    );
   }
 
   _renderContent(context) {
@@ -92,7 +43,9 @@ class _HomePageState extends State<HomePage> {
       margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0, bottom: 0.0),
       color: Color(0x00000000),
       child: FlipCard(
+        key: cardKey,
         direction: FlipDirection.HORIZONTAL,
+        flipOnTouch: false,
         speed: 1000,
         front: Container(
           decoration: BoxDecoration(
@@ -136,10 +89,7 @@ class _HomePageState extends State<HomePage> {
                 top: 80,
                 left: 30,
                 child: Text(
-//                  'XXXX XXXX XXXX XXXX',
-                  cardNoController.text.isEmpty
-                      ? 'XXXX XXXX XXXX XXXX'
-                      : cardNoController.text,
+                  cardNo.isEmpty ? 'XXXX XXXX XXXX XXXX' : cardNo,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -150,7 +100,18 @@ class _HomePageState extends State<HomePage> {
                 top: 120,
                 left: 30,
                 child: Text(
-                  'Valid until   MM/YY',
+                  'Valid until',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 120,
+                left: 130,
+                child: Text(
+                  expDate.isEmpty ? 'MM/YY' : expDate,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -161,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                 bottom: 20,
                 left: 30,
                 child: Text(
-                  'CARDHOLDER NAME',
+                  cardHolderName.isEmpty ? 'CARDHOLDER NAME' : cardHolderName,
                   style: TextStyle(
                     fontSize: 22,
                     color: Colors.black,
@@ -209,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                 top: 115,
                 left: 330,
                 child: Text(
-                  'CVV',
+                  cvv,
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -236,10 +197,18 @@ class _HomePageState extends State<HomePage> {
     Size deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Container(
-            color: Colors.blue,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.blue,
+                  Colors.blueAccent,
+                ],
+              ),
+            ),
             height: deviceSize.height,
             width: deviceSize.width,
             child: Column(
@@ -269,12 +238,20 @@ class _HomePageState extends State<HomePage> {
                               bottom: 0,
                             ),
                             child: TextField(
-                              controller: cardNoController,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                               ),
-                              maxLength: 16,
+                              onTap: () {
+                                // ignore: unnecessary_statements
+                                cardKey.currentState.isFront;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  cardNo = value;
+                                });
+                              },
+                              maxLength: 19,
                               style: TextStyle(
                                 fontSize: 36.0,
                                 color: Colors.white,
@@ -293,11 +270,20 @@ class _HomePageState extends State<HomePage> {
                               bottom: 5,
                             ),
                             child: TextField(
-                              controller: expDateController,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                               ),
+                              onTap: () {
+                                // ignore: unnecessary_statements
+                                cardKey.currentState.isFront;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  expDate = value;
+                                });
+                              },
+                              maxLength: 5,
                               style: TextStyle(
                                 fontSize: 36.0,
                                 color: Colors.white,
@@ -316,11 +302,18 @@ class _HomePageState extends State<HomePage> {
                               bottom: 5,
                             ),
                             child: TextField(
-                              controller: cvvController,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                               ),
+                              onTap: () {
+                                cardKey.currentState.toggleCard();
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  cvv = value;
+                                });
+                              },
                               maxLength: 4,
                               style: TextStyle(
                                 fontSize: 36.0,
@@ -340,11 +333,20 @@ class _HomePageState extends State<HomePage> {
                               bottom: 5,
                             ),
                             child: TextField(
-                              controller: cardHolderNameController,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                               ),
+                              onTap: () {
+                                // ignore: unnecessary_statements
+                                cardKey.currentState.toggleCard();
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  cardHolderName = value;
+                                });
+                              },
+                              maxLength: 30,
                               style: TextStyle(
                                 fontSize: 36.0,
                                 color: Colors.white,
@@ -352,15 +354,32 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-//                        Container(
-//                          height: 50,
-//                          width: 50,
-//                          color: Colors.white,
-//                          child: AnimatedIcon(
-//                            icon: AnimatedIcons.arrow_menu,
-//                            progress: Animation(1),
-//                          ),
-//                        ),
+                        Center(
+                          child: Container(
+                            height: 60,
+                            width: deviceSize.width * 0.8,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: FlatButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Success()),
+                                );
+                              },
+                              child: Text(
+                                'CHECKOUT',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black.withOpacity(0.7),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
